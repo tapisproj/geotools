@@ -169,7 +169,7 @@ public class ProcessFunctionFactory implements FunctionFactory {
         }
         if(resultInfo.size() == 1) {
 			if(resultInfo.values().iterator().next() != null) {
-                return resultInfo.values().iterator().next().getName();
+                return resultInfo.values().iterator().next();
             }
         } else {
             for (Parameter<?> param : resultInfo.values()) {
