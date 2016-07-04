@@ -139,21 +139,22 @@ public class ProcessFunctionFactory implements FunctionFactory {
             for (ProcessFactory factory : factories) {
                 for (Name processName : factory.getNames()) {
                     Map<String, Parameter<?>> resultInfo = factory.getResultInfo(processName, null);
-                    
-                    org.opengis.parameter.Parameter<?> result = getPrimary(resultInfo);
-                    // check there is a single output
-                    if (result != null) {
-                        Map<String, Parameter<?>> parameterInfo = factory.getParameterInfo(processName);
-                        List<String> argumentNames = new ArrayList<String>(parameterInfo.keySet());
-                        List<org.opengis.parameter.Parameter<?>> args = new ArrayList<org.opengis.parameter.Parameter<?>>( argumentNames.size() );
-                        for(String argumentName : argumentNames ){
-                            args.add( parameterInfo.get(argumentName));
-                        }
+					if(resultInfo != null) {
+						org.opengis.parameter.Parameter<?> result = getPrimary(resultInfo);
+						// check there is a single output
+						if (result != null) {
+							Map<String, Parameter<?>> parameterInfo = factory.getParameterInfo(processName);
+							List<String> argumentNames = new ArrayList<String>(parameterInfo.keySet());
+							List<org.opengis.parameter.Parameter<?>> args = new ArrayList<org.opengis.parameter.Parameter<?>>( argumentNames.size() );
+							for(String argumentName : argumentNames ){
+								args.add( parameterInfo.get(argumentName));
+							}
 
-                        FunctionName functionName = new FunctionNameImpl(processName, result, args);
-                        functionNames.add(functionName);
-                        processToFunction.put(processName, functionName);
-                    }
+							FunctionName functionName = new FunctionNameImpl(processName, result, args);
+							functionNames.add(functionName);
+							processToFunction.put(processName, functionName);
+						}
+					}
                 }
             }
             
@@ -167,10 +168,12 @@ public class ProcessFunctionFactory implements FunctionFactory {
             return null;
         }
         if(resultInfo.size() == 1) {
-            return resultInfo.values().iterator().next();
+			if(resultInfo.values().iterator().next() != null) {
+                return resultInfo.values().iterator().next().getName();
+            }
         } else {
             for (Parameter<?> param : resultInfo.values()) {
-                if(param.isRequired()) {
+                if(param != null && param.isRequired()) {
                     return param;
                 }
             }
