@@ -1452,6 +1452,7 @@
           <!-- needed for filtering with VERSION.txt -->
           <skipPoms>false</skipPoms>
           <verbose>false</verbose>
+          <runOnlyOnce>true</runOnlyOnce>
           <gitDescribe>
             <!-- the git describe step is expensive, we don't need it -->
             <skip>true</skip>
